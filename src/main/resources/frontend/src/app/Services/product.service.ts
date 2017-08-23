@@ -21,7 +21,7 @@ export class ProductService {
   }
 
   getProducts(){
-    return this._http.get(this.url+'/getAllProdutcs').map(res => res.json());
+    return this._http.get(this.url+'/getAllProducts').map(res => res.json());
   }
 
 }

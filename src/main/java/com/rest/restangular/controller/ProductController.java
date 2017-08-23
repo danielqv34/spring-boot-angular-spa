@@ -26,7 +26,7 @@ import java.util.List;
  * Time: 2:25 PM
  */
 @RestController
-@RequestMapping("/produtcs")
+@RequestMapping("/products")
 public class ProductController {
 
     private final Log LOG = LogFactory.getLog(ProductController.class);
@@ -37,7 +37,7 @@ public class ProductController {
     private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\Desktop\\restangular\\upload files\\";
 
 
-    @GetMapping("/getAllProdutcs")
+    @GetMapping("/getAllProducts")
     private ResponseEntity<List<Product>> getProductList() {
         List<Product> productList = productService.listAllProducts();
         if (productList.isEmpty()) {
