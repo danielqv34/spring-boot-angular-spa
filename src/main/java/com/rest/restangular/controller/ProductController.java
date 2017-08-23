@@ -26,6 +26,7 @@ import java.util.List;
  * Time: 2:25 PM
  */
 @RestController
+@RequestMapping("/produtcs")
 public class ProductController {
 
     private final Log LOG = LogFactory.getLog(ProductController.class);
