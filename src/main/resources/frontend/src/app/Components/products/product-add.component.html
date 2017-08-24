@@ -30,7 +30,7 @@
   <label>Imagen:
     <!--<span class="label label-danger" *ngIf="!productCode.valid && productCode.touched">El Codigo del Producto es obligatorio</span>-->
   </label>
-  <input type="file" class="form-control" (change)="fileChangeEvent($event)" >
+  <input type="file" id="file" #image class="form-control" (change)="fileChangeEvent(image)" name="file"   />
 
   <br/>
 

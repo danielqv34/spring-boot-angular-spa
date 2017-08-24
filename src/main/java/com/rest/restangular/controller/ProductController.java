@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\Desktop\\restangular\\upload files\\";
+    private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\IdeaProjects\\spring-boot-angular-spa\\upload files\\";
 
 
     @GetMapping("/getAllProducts")
@@ -51,16 +52,15 @@ public class ProductController {
     @PostMapping("/saveProduct")
     public ResponseEntity<Void> saveProduct(@RequestBody Product product, UriComponentsBuilder builder) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        if (productService.productExists(product)){
-            LOG.info("El producto "+product.getProductName()+" Ya existe");
+        if (productService.productExists(product)) {
+            LOG.info("El producto " + product.getProductName() + " Ya existe");
             httpHeaders.set("status", "CONFLICT");
             httpHeaders.set("code", "409");
             httpHeaders.set("message", "Ya existe el producto que trata de insertar");
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-        }
-        else {
+        } else {
             productService.saveProduct(product);
-            LOG.info("Producto Insertado "+product.toString());
+            LOG.info("Producto Insertado " + product.toString());
             httpHeaders.set("status", "success");
             httpHeaders.set("code", "200");
             httpHeaders.set("message", "Producto Guardado");
@@ -92,45 +92,53 @@ public class ProductController {
     }
 
     @PutMapping("/updateProduct/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @ModelAttribute Product product){
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @ModelAttribute Product product) {
         Product productUpdate = productService.getProductById(id);
 
-        if (productUpdate == null){
+        if (productUpdate == null) {
             return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
-        }else {
+        } else {
             productUpdate.setCode(product.getCode());
             productUpdate.setProductName(product.getProductName());
             productUpdate.setDescription(product.getDescription());
             productUpdate.setPrice(product.getPrice());
             productUpdate.setImage(product.getImage());
             productService.saveProduct(productUpdate);
-            return new ResponseEntity<Product>(productUpdate,HttpStatus.OK);
+            return new ResponseEntity<Product>(productUpdate, HttpStatus.OK);
         }
     }
 
     @PostMapping("/uploadImage")
-    public ResponseEntity<Void> uploadImage(@RequestParam MultipartFile file , RedirectAttributes redirectAttributes){
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile fileToUplodad) {
+        if (fileToUplodad.isEmpty()) {
+            return new ResponseEntity("please select a file!", HttpStatus.OK);
+        }
+        try {
+            saveUploadedFiles(Arrays.asList(fileToUplodad));
+            LOG.info("Successfully uploaded");
 
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        try {
+        return new ResponseEntity("Successfully uploaded - " +
+                fileToUplodad.getOriginalFilename(), new HttpHeaders(), HttpStatus.OK);
 
-            // Get the file and save it somewhere
+    }
+
+    //save file
+    private void saveUploadedFiles(List<MultipartFile> files) throws IOException {
+
+        for (MultipartFile file : files) {
+
+            if (file.isEmpty()) {
+                continue; //next pls
+            }
+
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
 
-            redirectAttributes.addFlashAttribute("message",
-                    "Archivo Cargado Correctamente '" + file.getOriginalFilename() + "'");
-            LOG.info("Archivo Cargado Correctamente");
-            return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
 
     }
