@@ -49,7 +49,7 @@ public class ProductController {
     }
 
     @PostMapping("/saveProduct")
-    public ResponseEntity<Void> saveProduct(@ModelAttribute Product product, UriComponentsBuilder builder) {
+    public ResponseEntity<Void> saveProduct(@RequestBody Product product, UriComponentsBuilder builder) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if (productService.productExists(product)){
             LOG.info("El producto "+product.getProductName()+" Ya existe");
@@ -60,7 +60,7 @@ public class ProductController {
         }
         else {
             productService.saveProduct(product);
-            LOG.info("Producto Insertado");
+            LOG.info("Producto Insertado "+product.toString());
             httpHeaders.set("status", "success");
             httpHeaders.set("code", "200");
             httpHeaders.set("message", "Producto Guardado");
@@ -109,7 +109,7 @@ public class ProductController {
     }
 
     @PostMapping("/uploadImage")
-    public ResponseEntity<Void> uploadImage(@RequestParam("image")MultipartFile file , RedirectAttributes redirectAttributes){
+    public ResponseEntity<Void> uploadImage(@RequestParam MultipartFile file , RedirectAttributes redirectAttributes){
 
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload");

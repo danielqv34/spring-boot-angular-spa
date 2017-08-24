@@ -8,6 +8,8 @@ import {Component} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {ProductService} from "../../Services/product.service";
 import {Product} from "../../Models/Product";
+import {Global} from "../../Services/Global";
+import {error} from "util";
 
 @Component({
   selector: 'app-product-add',
@@ -15,30 +17,43 @@ import {Product} from "../../Models/Product";
   providers: [ProductService]
 })
 
-export class ProductAddComponent{
-  title:string;
-  public product:Product;
+export class ProductAddComponent {
+  title: string;
+  public product: Product;
+  public fileToUplodad;
+  public resultUpload;
 
-  constructor(private _productService:ProductService,
-              private _router:Router,
-              private _route: ActivatedRoute
-              ){
+  constructor(private _productService: ProductService,
+              private _router: Router,
+              private _route: ActivatedRoute) {
     this.title = 'Agregar Producto';
-    this.product = new Product();
+    this.product = new Product(0, '', '', '', 0, '');
   }
 
-  ngOnInit(){
+  ngOnInit() {
     console.log('Componente Product Add loaded!!')
   }
 
-  addProduct(){
+  onSubmit() {
+    this._productService.makeFileRequest(Global.url + 'uploadImage', [], this.fileToUplodad).then((result) => {
+      console.log(result);
+    }, (error) => {
+      console.log(error);
+    });
     this._productService.addProduct(this.product).subscribe(
-      res =>{
-            this._router.navigate(['/product/list'])
-      },error2 => {
-        console.log(<any> error2)
+      res => {
+        if (res == 201) {
+          this._router.navigate(['product-list'])
+        }
+      }, error => {
+        console.log(<any> error)
       }
     );
-    console.log(this.product);
+
+  }
+
+  fileChangeEvent(fileInput: any) {
+    this.fileToUplodad = <Array<File>>fileInput.target.files;
+    console.log(this.fileToUplodad);
   }
 }
