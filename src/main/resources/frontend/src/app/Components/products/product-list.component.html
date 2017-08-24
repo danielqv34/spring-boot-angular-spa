@@ -1,1 +1,12 @@
 <h2>{{title}}</h2>
+
+<div *ngIf="!allProducts">
+  <h3>Cargando Catalogo</h3>
+</div>
+<div *ngIf="allProducts">
+  <ul *ngFor="let product of allProducts">
+    <li><strong>{{product.productName}}</strong></li>
+    <li>{{product.description}}</li>
+    <li>{{product.price}} RD$</li>
+  </ul>
+</div>

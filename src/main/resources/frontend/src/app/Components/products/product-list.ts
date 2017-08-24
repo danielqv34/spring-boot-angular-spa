@@ -29,7 +29,8 @@ export class ProductList {
     console.log('Componente de Productos Loaded');
     this._productService.getProducts().subscribe(
       result => {
-            console.log(result);
+            this.allProducts = result;
+            console.log(this.allProducts);
       }, error => {
         console.log(<any>error);
       }

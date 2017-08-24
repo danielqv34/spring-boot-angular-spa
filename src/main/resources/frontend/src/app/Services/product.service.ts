@@ -24,4 +24,12 @@ export class ProductService {
     return this._http.get(this.url+'/getAllProducts').map(res => res.json());
   }
 
+  addProduct(product:Product){
+    let json  = JSON.stringify(product);
+    let params = json;
+    let headers = new Headers({'Content-Type':'applicattion/json'});
+    console.log('Producto: '+params)
+    return this._http.post(this.url+'/saveProduct', params, {headers:headers}).map(res => res.json());
+  }
+
 }
