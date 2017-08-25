@@ -35,7 +35,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\IdeaProjects\\spring-boot-angular-spa\\upload files\\";
+    private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\IdeaProjects\\spring-boot-angular-spa\\src\\main\\resources\\uploadFiles\\";
 
 
     @GetMapping("/getAllProducts")
@@ -108,8 +108,8 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/uploadImage")
-    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile fileToUplodad) {
+    @PostMapping("/uploadImage/{file}")
+    public ResponseEntity<?> uploadImage(@PathVariable("file") MultipartFile fileToUplodad) {
         if (fileToUplodad.isEmpty()) {
             return new ResponseEntity("please select a file!", HttpStatus.OK);
         }

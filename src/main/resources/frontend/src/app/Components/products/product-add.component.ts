@@ -22,7 +22,7 @@ export class ProductAddComponent {
   public product: Product;
   public fileToUplodad;
   public resultUpload;
-  public successMsg:string;
+
 
   constructor(private _productService: ProductService,
               private _router: Router,
@@ -36,23 +36,14 @@ export class ProductAddComponent {
   }
 
   onSubmit() {
-    // this._productService.makeFileRequest(Global.url , [], this.fileToUplodad).then((result) => {
-    //     console.log(result);
-    //   }, (error) => {
-    //     console.log(error);
-    //   });
-    if (this.fileToUplodad !== undefined) {
-      this._productService.makeFileRequest(this.fileToUplodad).then(responce => {
-
-      }),(error) => {
-        error = error
-      };
-      setTimeout(() => {
-        this.successMsg = "Successfully uploaded !!";
-      }, 10000);
-    } else {
-      //show error
-    }
+    this._productService.makeFileRequest(Global.url , [], this.fileToUplodad).then((result) => {
+        console.log(result);
+        this.resultUpload = result;
+        this.product.image = this.resultUpload.fileName;
+        console.log(this.resultUpload.fileName);
+      }, (error) => {
+        console.log(error);
+      });
     this._productService.addProduct(this.product).subscribe(
       res => {
         if (res == 201) {
@@ -67,8 +58,6 @@ export class ProductAddComponent {
 
   fileChangeEvent(fileInput: any) {
     this.fileToUplodad = <Array<File>>fileInput.files;
-    // let empDataFiles: FileList = fileInput.files;
-    // this.fileToUplodad = empDataFiles[0];
     console.log(this.fileToUplodad);
   }
 }
