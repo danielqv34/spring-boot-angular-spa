@@ -61,6 +61,22 @@
 
 
 }
+.image-container{
+  width: 100%;
+  overflow: hidden;
+}
+.image-product{
+  /*width: 100%;*/
+  height: 200px;
+  margin: 0px auto;
+  display: block;
+  max-width: 100%;
+}
+.img-releno{
+  background: #ccc;
+  width: 100%;
+  height: 200px;
+}
 
 #formProducts label{
   margin-top: 10px;
