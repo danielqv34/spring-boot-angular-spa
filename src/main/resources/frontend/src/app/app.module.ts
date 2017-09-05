@@ -9,10 +9,12 @@ import {ProductList} from "./Components/products/product-list";
 import {ProductAddComponent} from "./Components/products/product-add.component"
 import {ProductDetailComponent} from "./Components/products/product-detail.component";
 import {ErrorComponent} from "./Components/error/error.component";
+import {ProductEditComponent} from "./Components/products/product-edit.component";
 
 @NgModule({
   declarations: [
-    AppComponent, HomeComponent, ErrorComponent, ProductList , ProductAddComponent , ProductDetailComponent
+    AppComponent, HomeComponent, ErrorComponent, ProductList , ProductAddComponent ,
+    ProductDetailComponent, ProductEditComponent
   ],
   imports: [
     BrowserModule , routing , HttpModule , FormsModule

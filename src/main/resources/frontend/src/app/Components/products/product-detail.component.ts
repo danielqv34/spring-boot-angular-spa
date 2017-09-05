@@ -27,12 +27,6 @@ export class ProductDetailComponent {
 
   ngOnInit() {
     console.log('Component ' + this.title + ' loaded!!');
-    // this.route.params.switchMap((params: Params) => this.productService.getProductById(params['id']))
-    //   .subscribe(
-    //     result => {
-    //       this.product.id = result.id;
-    //     }
-    //   );
     this.getProductById();
   }
 
