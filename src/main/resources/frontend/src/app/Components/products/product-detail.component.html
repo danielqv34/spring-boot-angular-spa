@@ -1,0 +1,16 @@
+<h1>{{title}}</h1>
+<div *ngIf="!product">
+  <h4>Cargando Producto</h4>
+</div>
+<div *ngIf="product">
+  <div class="col-lg-3" *ngIf="product.image" >
+      <img src="http://localhost:8088/{{product.image}}" class="image-product"/>
+  </div>
+  <div class="col-lg-9">
+    <h4>{{product.productName}}</h4>
+    <p><strong>Descripcion: {{product.description}}</strong></p>
+    <p><strong>Precio: {{product.price}} RD$</strong></p>
+    <button class="btn btn-success">Comprar</button>
+  </div>
+</div>
+

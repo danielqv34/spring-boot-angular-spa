@@ -35,7 +35,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\IdeaProjects\\spring-boot-angular-spa\\src\\main\\resources\\uploadFiles\\";
+    private String imageName = "";
+
+    private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\IdeaProjects\\spring-boot-angular-spa\\src\\main\\resources\\static\\";
 
 
     @GetMapping("/getAllProducts")
@@ -59,6 +61,7 @@ public class ProductController {
             httpHeaders.set("message", "Ya existe el producto que trata de insertar");
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         } else {
+            product.setImage(imageName);
             productService.saveProduct(product);
             LOG.info("Producto Insertado " + product.toString());
             httpHeaders.set("status", "success");
@@ -108,13 +111,14 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/uploadImage/{file}")
-    public ResponseEntity<?> uploadImage(@PathVariable("file") MultipartFile fileToUplodad) {
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile fileToUplodad) {
         if (fileToUplodad.isEmpty()) {
             return new ResponseEntity("please select a file!", HttpStatus.OK);
         }
         try {
             saveUploadedFiles(Arrays.asList(fileToUplodad));
+            imageName = fileToUplodad.getOriginalFilename();
             LOG.info("Successfully uploaded");
 
         } catch (IOException e) {

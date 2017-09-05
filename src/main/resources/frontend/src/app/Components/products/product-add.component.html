@@ -1,6 +1,6 @@
 <h1>{{title}}</h1>
 
-<form #formProduct="ngForm" class="col-lg-6" id="formProducts" (ngSubmit)="onSubmit()">
+<form #formProduct="ngForm" class="col-lg-6" id="formProducts" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
   <label>Codigo Producto:
     <span class="label label-danger" *ngIf="!code.valid && code.touched">El Codigo del Producto es obligatorio</span>

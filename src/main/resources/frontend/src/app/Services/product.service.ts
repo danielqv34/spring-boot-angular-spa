@@ -7,6 +7,7 @@
 import {Injectable} from "@angular/core";
 import {Http, Response, URLSearchParams, Headers, RequestOptions} from "@angular/http";
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 import {Observable} from "rxjs/Observable";
 import {Product} from "../Models/Product";
 import {Global} from "./Global";
@@ -32,27 +33,17 @@ export class ProductService {
 
   }
 
-  // makeFileRequest(file: File) {
-  //     return new Promise((resolve, reject) => {
-  //       var formData: any = new FormData();
-  //       var xhr = new XMLHttpRequest();
-  //       formData.append("file", file, file.name);
-  //
-  //       xhr.onreadystatechange = function () {
-  //         if (xhr.readyState === 4) {
-  //           if (xhr.status === 200) {
-  //             resolve(xhr.response)
-  //           } else {
-  //             reject(xhr.response)
-  //           }
-  //         }
-  //       };
-  //
-  //       xhr.open("POST", this.url + 'uploadImage', true);
-  //       xhr.send(formData)
-  //     });
-  //
-  // }
+
+  getProductById(id) {
+    return this._http.get(this.url + 'getProductById/' + id).map(success => success.json());
+  }
+
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+  }
+
 
   makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
     return new Promise((resolve, reject) => {
@@ -60,13 +51,12 @@ export class ProductService {
       var xhr = new XMLHttpRequest();
 
       for (var i = 0; i < files.length; i++) {
-        formData.append('file', files[i].name);
-        formData.append('file',params)
+        formData.append('file',files[i], files[i].name);
       }
       xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
           if (xhr.status == 200) {
-            resolve(JSON.parse(xhr.response));
+            resolve(xhr.response);
           } else {
             reject(xhr.response);
           }
