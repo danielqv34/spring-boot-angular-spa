@@ -38,6 +38,16 @@ export class ProductService {
     return this._http.get(this.url + 'getProductById/' + id).map(success => success.json());
   }
 
+  updateProduct(id: number, product: Product) {
+    let cpHeaders = new Headers({'Content-Type': 'application/json'});
+    let options = new RequestOptions({headers: cpHeaders});
+    console.log("PRODUCTO: " + product)
+    return this._http.put(this.url + 'updateProduct/' + id, product, options).map(res => res.json());
+  }
+
+  deleteProduct(id: number) {
+    return this._http.delete(this.url + 'deleteProduct/' + id).map(res => res.status);
+  }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
@@ -51,7 +61,7 @@ export class ProductService {
       var xhr = new XMLHttpRequest();
 
       for (var i = 0; i < files.length; i++) {
-        formData.append('file',files[i], files[i].name);
+        formData.append('file', files[i], files[i].name);
       }
       xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {

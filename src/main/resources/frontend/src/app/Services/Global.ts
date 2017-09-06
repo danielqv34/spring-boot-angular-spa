@@ -6,5 +6,5 @@
  */
 
 export var Global ={
-  url: 'http://localhost:8088/products/'
+  url: 'http://localhost:8088/appAngular/products/'
 }

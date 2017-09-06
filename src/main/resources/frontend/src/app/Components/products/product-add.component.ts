@@ -36,14 +36,23 @@ export class ProductAddComponent {
   }
 
   onSubmit() {
-    this._productService.makeFileRequest(Global.url , [], this.fileToUplodad).then((result) => {
+    if (this.fileToUplodad && this.fileToUplodad.length >= 1) {
+      this._productService.makeFileRequest(Global.url, [], this.fileToUplodad).then((result) => {
         console.log(result);
         this.resultUpload = result;
         this.product.image = this.resultUpload.fileName;
+        this.saveProduct()
         console.log(this.resultUpload.fileName);
       }, (error) => {
         console.log(error);
       });
+
+    } else {
+      this.saveProduct();
+    }
+  }
+
+  saveProduct() {
     this._productService.addProduct(this.product).subscribe(
       res => {
         if (res == 201) {
@@ -53,7 +62,6 @@ export class ProductAddComponent {
         console.log(<any> error)
       }
     );
-
   }
 
   fileChangeEvent(fileInput: any) {

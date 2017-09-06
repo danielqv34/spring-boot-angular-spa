@@ -18,6 +18,7 @@ import {Product} from "../../Models/Product";
 export class ProductList {
   public title: string;
   public allProducts: Array<Product>;
+  public confirmDelete:any = null;
 
   constructor(private _route: ActivatedRoute,
               private _router: Router,
@@ -27,14 +28,35 @@ export class ProductList {
 
   ngOnInit() {
     console.log('Componente de Productos Loaded');
+    this.getProducts();
+
+  }
+
+  getProducts() {
     this._productService.getProducts().subscribe(
       result => {
-            this.allProducts = result;
-            console.log(this.allProducts);
+        this.allProducts = result;
+        console.log(this.allProducts);
       }, error => {
         console.log(<any>error);
       }
     )
+  }
 
+  deleteProduct(id: number) {
+    this._productService.deleteProduct(id).subscribe(res => {
+      // if (res = 200) {
+        this.getProducts();
+      // }
+    }, error => {
+      console.log(error)
+    });
+  }
+
+  deleteConfirm(id:number){
+    this.confirmDelete = id;
+  }
+  cancelDelete(){
+    this.confirmDelete = null;
   }
 }

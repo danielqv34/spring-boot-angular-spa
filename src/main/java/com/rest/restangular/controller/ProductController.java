@@ -5,14 +5,14 @@ import com.rest.restangular.services.ProductService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +35,10 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    ServletContext servletContext;
+
+
     private String imageName = "";
 
     private static String UPLOADED_FOLDER = "C:\\Users\\daniel quiroz\\IdeaProjects\\spring-boot-angular-spa\\src\\main\\resources\\static\\";
@@ -43,6 +47,8 @@ public class ProductController {
     @GetMapping("/getAllProducts")
     private ResponseEntity<List<Product>> getProductList() {
         List<Product> productList = productService.listAllProducts();
+        LOG.info("RUTA SERVER CONEXT PATH "+servletContext.getContextPath());
+        LOG.info("RUTA SERVER REAL PATH "+servletContext.getRealPath(""));
         if (productList.isEmpty()) {
             LOG.info("La lista esta vacia");
             return new ResponseEntity<List<Product>>(productList, HttpStatus.NOT_FOUND);
@@ -95,7 +101,7 @@ public class ProductController {
     }
 
     @PutMapping("/updateProduct/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @ModelAttribute Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @RequestBody Product product) {
         Product productUpdate = productService.getProductById(id);
 
         if (productUpdate == null) {
@@ -105,7 +111,7 @@ public class ProductController {
             productUpdate.setProductName(product.getProductName());
             productUpdate.setDescription(product.getDescription());
             productUpdate.setPrice(product.getPrice());
-            productUpdate.setImage(product.getImage());
+            productUpdate.setImage(imageName);
             productService.saveProduct(productUpdate);
             return new ResponseEntity<Product>(productUpdate, HttpStatus.OK);
         }
@@ -140,7 +146,9 @@ public class ProductController {
             }
 
             byte[] bytes = file.getBytes();
+
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            System.out.println("Ruta: "+path.getParent());
             Files.write(path, bytes);
 
         }

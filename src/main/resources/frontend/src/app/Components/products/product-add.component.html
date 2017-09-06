@@ -30,6 +30,9 @@
   <label>Imagen:
     <!--<span class="label label-danger" *ngIf="!productCode.valid && productCode.touched">El Codigo del Producto es obligatorio</span>-->
   </label>
+  <div *ngIf="isEdit">
+    <img src="http://localhost:8088/{{product.image}}"  width="60px"/>
+  </div>
   <input type="file" id="file" #image class="form-control" (change)="fileChangeEvent(image)" name="file"   />
 
   <br/>

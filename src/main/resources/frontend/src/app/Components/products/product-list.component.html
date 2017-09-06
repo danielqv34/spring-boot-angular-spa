@@ -4,11 +4,11 @@
   <h3>Cargando Catalogo</h3>
 </div>
 <div *ngIf="allProducts">
-  <div class="row" >
+  <div class="row">
     <div class="col-lg-4" *ngFor="let product of allProducts">
       <div class="thumbnail">
         <div *ngIf="product.image" class="image-container">
-          <img src="http://localhost:8088/{{product.image}}" class="image-product"/>
+          <img src="http://localhost:8088/appAngular/{{product.image}}" class="image-product"/>
         </div>
         <div *ngIf="!product.image">
           <div class="img-releno"></div>
@@ -17,11 +17,16 @@
           <h3>{{product.productName}}</h3>
           <p>{{product.description}}</p>
           <p>{{product.price}} RD$</p>
-          <p>
-           <a [routerLink]="['/product-detail',product.id]" class="btn btn-md btn-primary">Ver</a>
-           <a [routerLink]="['/product-edit',product.id]" class="btn btn-md btn-warning">Editar</a>
-           <a href="" class="btn btn-md btn-danger">Eliminar</a>
-          </p>
+
+          <div class="butons" *ngIf="confirmDelete != product.id">
+            <a [routerLink]="['/product-detail',product.id]" class="btn btn-md btn-primary">Ver</a>
+            <a [routerLink]="['/product-edit',product.id]" class="btn btn-md btn-warning">Editar</a>
+            <a (click)="deleteConfirm(product.id)" class="btn btn-md btn-danger">Eliminar</a>
+          </div>
+          <div class="secure-delete" *ngIf="confirmDelete == product.id">
+              <a class="btn btn-danger" (click)="deleteProduct(product.id)">Eliminar</a>
+              <a class="btn btn-warning" (click)="cancelDelete()">Cancelar</a>
+          </div>
         </div>
       </div>
     </div>
